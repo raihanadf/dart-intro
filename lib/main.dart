@@ -70,15 +70,30 @@ class MyApp extends StatelessWidget {
       ],
     );
 
+    Widget textSection = const Padding(
+      padding: EdgeInsets.all(32),
+      child: Text(
+        "Khianati sebisa dirimu mengkhianati, karena ku pastikan andai dulu kau tak belum tentu kisah kita berakhir bahagia kisah yang aowkaokwoakwoakwok lorem ipsum dolor sit jamet",
+        softWrap: true,
+        ),
+    );
+
     return MaterialApp(
-      title: 'Welcome to Flutter',
+      title: 'Test lmaoo',
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Welcome to Flutter'),
+          title: const Text('Test lmaoo'),
         ),
-        body: Column(children: [
+        body: ListView(children: [
+          Image.asset(
+            'images/lake.jpg',
+            width: 600,
+            height: 240,
+            fit: BoxFit.cover,
+          ),
           titleSection,
           buttonSection,
+          textSection
         ]),
       ),
     );
