@@ -1,229 +1,176 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 
-void main() {
-  runApp(
-    MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Named Routes Demo',
-      initialRoute: '/',
-      routes: {
-        '/': (context) => const MyApp(),
-        '/second': (context) => const SecondApp(),
-      },
-    ),
-  );
+void main(List<String> args) {
+  runApp(const MaterialApp(
+    debugShowCheckedModeBanner: false,
+    home: Home(),
+  ));
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class Home extends StatefulWidget {
+  const Home({Key? key}) : super(key: key);
+
+  @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  final List<String> gambar = [
+    "https://docs.flutter.dev/assets/images/dash/dash-fainting.gif",
+    "https://c.tenor.com/Rz19D5EE6QoAAAAC/dank-meme.gif",
+    "https://media1.giphy.com/media/8m4R4pvViWtRzbloJ1/200w.gif?cid=82a1493biapxotzqld66hsvzjup8uxt5yg7bcm3i0lzs7cju&rid=200w.gif&ct=g",
+    "https://docs.flutter.dev/assets/images/dash/dash-fainting.gif",
+    "https://docs.flutter.dev/assets/images/dash/dash-fainting.gif",
+    "https://docs.flutter.dev/assets/images/dash/dash-fainting.gif",
+    "https://docs.flutter.dev/assets/images/dash/dash-fainting.gif",
+    "https://docs.flutter.dev/assets/images/dash/dash-fainting.gif",
+  ];
+
+  static const Map<String, Color> colors = {
+    "one": Color(0xFF2DB569),
+    "two": Color(0xFF2DB569),
+    "three": Color(0xFF2DB569),
+    "four": Color(0xFF2DB569),
+    "five": Color(0xFF2DB569),
+    "six": Color(0xFF2DB569),
+    "seven": Color(0xFF2DB569),
+    "eight": Color(0xFF2DB569),
+  };
 
   @override
   Widget build(BuildContext context) {
-    Widget upperSection = Container(
-      padding: const EdgeInsets.all(32),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              const Expanded(
-                  child: Text(
-                      "ketik 1 jika anda capek, yahahahah jamsut fristel hehe ku kira takkan ada kendala ku kira lorem ipsum dolor sit jamett",
-                      softWrap: true)),
-              Padding(
-                padding: EdgeInsets.all(10),
-                child: Column(
-                  children: const [Icon(Icons.place), Text("ligma")],
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.all(10),
-                child: Column(
-                  children: const [Icon(Icons.access_alarm), Text("sayang")],
-                ),
-              ),
-            ],
-          ),
-          Row(
-            children: [
-              ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, "/second");
-                  },
-                  child: Icon(Icons.abc))
-            ],
-          )
-        ],
-      ),
-    );
-
+    timeDilation = 5.0;
     return Scaffold(
-      appBar: AppBar(
-        leading: Icon(Icons.dashboard),
-        title: const Text("Belajar melepaskan dirinya"),
-        actions: [
-          Row(
-            children: const [
-              Padding(
-                padding: EdgeInsets.all(10),
-                child: Icon(Icons.search),
-              )
-            ],
-          )
-        ],
-        backgroundColor: Colors.blue[500],
-      ),
-      body: Column(
-        children: [
-          Image.network(
-            "https://docs.flutter.dev/assets/images/dash/dash-fainting.gif",
-            width: 600,
-            fit: BoxFit.cover,
-          ),
-          const FavoriteWidget(),
-          upperSection,
-          Padding(
-            padding: const EdgeInsets.all(10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Column(
+      body: Container(
+        decoration: const BoxDecoration(
+            gradient: LinearGradient(
+                colors: [Colors.white, Colors.purpleAccent, Colors.deepPurple],
+                begin: FractionalOffset.topCenter,
+                end: FractionalOffset.bottomCenter)),
+        child: PageView.builder(
+          controller: PageController(viewportFraction: 0.8),
+          itemCount: gambar.length,
+          itemBuilder: (BuildContext context, int i) {
+            return Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 5.0, vertical: 50.0),
+              child: Material(
+                elevation: 8.0,
+                child: Stack(
+                  fit: StackFit.expand,
                   children: [
-                    Container(
-                      width: 50,
-                      height: 50,
-                      decoration: BoxDecoration(
-                          color: Colors.blue, shape: BoxShape.circle),
-                    ),
-                    Container(
-                      width: 50,
-                      height: 50,
-                      decoration: BoxDecoration(
-                          color: Colors.blue, shape: BoxShape.circle),
-                    ),
+                    Hero(
+                        tag: gambar[i],
+                        child: Material(
+                          child: InkWell(
+                            child: Flexible(
+                              flex: 1,
+                              child: Container(
+                                color: colors.values.elementAt(i),
+                                child: Image.network(
+                                  gambar[i],
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                            onTap: () => Navigator.of(context).push(
+                                MaterialPageRoute(
+                                    builder: (context) => Halamandua(
+                                        gambar: gambar[i],
+                                        colors: colors.values.elementAt(i)))),
+                          ),
+                        ))
                   ],
                 ),
-                Container(
-                  width: 50,
-                  height: 50,
-                  decoration: BoxDecoration(color: Colors.redAccent),
-                ),
-                Container(
-                  width: 50,
-                  height: 50,
-                  decoration: BoxDecoration(color: Colors.redAccent),
-                ),
-                Container(
-                  width: 50,
-                  height: 50,
-                  decoration: BoxDecoration(color: Colors.redAccent),
-                ),
-                Column(
-                  children: [
-                    Container(
-                      width: 50,
-                      height: 50,
-                      decoration: BoxDecoration(
-                          color: Colors.blue, shape: BoxShape.circle),
-                    ),
-                    Container(
-                      width: 50,
-                      height: 50,
-                      decoration: BoxDecoration(
-                          color: Colors.blue, shape: BoxShape.circle),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          )
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => print("hehe"),
-        backgroundColor: Colors.pink[500],
-        child: const Icon(Icons.add),
+              ),
+            );
+          },
+        ),
       ),
     );
   }
 }
 
-class FavoriteWidget extends StatefulWidget {
-  const FavoriteWidget({Key? key}) : super(key: key);
+class Halamandua extends StatefulWidget {
+  const Halamandua({super.key, required this.gambar, required this.colors});
+  final String gambar;
+  final Color colors;
 
   @override
-  State<FavoriteWidget> createState() => _FavoriteWidgetState();
+  State<Halamandua> createState() => _HalamanduaState();
 }
 
-class _FavoriteWidgetState extends State<FavoriteWidget> {
-  bool _isFavorited = true;
-  int _favoriteCount = 69;
+class _HalamanduaState extends State<Halamandua> {
+  Color warna = Colors.grey;
 
-  void _toggleFavorite() {
+  void _pilihannya(Pilihan pilihan) {
     setState(() {
-      if (_isFavorited) {
-        _favoriteCount -= 1;
-        _isFavorited = false;
-      } else {
-        _favoriteCount += 1;
-        _isFavorited = true;
-      }
+      warna = pilihan.warna;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          padding: const EdgeInsets.all(0),
-          child: IconButton(
-            padding: const EdgeInsets.all(0),
-            alignment: Alignment.centerRight,
-            icon: (_isFavorited
-                ? const Icon(Icons.star)
-                : const Icon(Icons.star_border)),
-            color: Colors.red[500],
-            onPressed: _toggleFavorite,
-          ),
-        ),
-        SizedBox(
-          width: 18,
-          child: SizedBox(child: Text('$_favoriteCount')),
-        )
-      ],
-    );
-  }
-}
-
-class SecondApp extends StatelessWidget {
-  const SecondApp({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-          child: ElevatedButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: Text("lol kids"))),
       appBar: AppBar(
-        leading: Icon(Icons.dashboard),
-        title: const Text("Belajar melepaskan dirinya"),
+        title: const Text("BT21"),
+        backgroundColor: Colors.purpleAccent,
         actions: [
-          Row(
-            children: const [
-              Padding(
-                padding: EdgeInsets.all(10),
-                child: Icon(Icons.search),
-              )
-            ],
+          PopupMenuButton<Pilihan>(
+              onSelected: _pilihannya,
+              itemBuilder: (BuildContext context) {
+                return listPilihan.map((Pilihan x) {
+                  return PopupMenuItem(value: x,child: Text(x.teks),);
+                }).toList();
+              })
+        ],
+      ),
+      body: Stack(
+        children: [
+          Container(
+            decoration: const BoxDecoration(
+                gradient: RadialGradient(
+                    center: Alignment.center,
+                    colors: [Colors.purple, Colors.white, Colors.deepPurple])),
+          ),
+          Center(
+            child: Hero(
+                tag: widget.gambar,
+                child: ClipOval(
+                  child: SizedBox(
+                    width: 200.0,
+                    height: 200.0,
+                    child: Material(
+                      child: InkWell(
+                        onTap: () => Navigator.of(context).pop(),
+                        child: Flexible(
+                            child: Flexible(
+                                flex: 1,
+                                child: Container(
+                                  color: widget.colors,
+                                  child: Image.network(widget.gambar,
+                                      fit: BoxFit.cover),
+                                ))),
+                      ),
+                    ),
+                  ),
+                )),
           )
         ],
-        backgroundColor: Colors.blue[500],
       ),
     );
   }
 }
+
+class Pilihan {
+  const Pilihan({required this.teks, required this.warna});
+  final String teks;
+  final Color warna;
+}
+
+List<Pilihan> listPilihan = const <Pilihan>[
+  const Pilihan(teks: "Red", warna: Colors.red),
+  const Pilihan(teks: "Green", warna: Colors.green),
+  const Pilihan(teks: "Blue", warna: Colors.blue),
+];
