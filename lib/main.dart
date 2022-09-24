@@ -1,176 +1,101 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main(List<String> args) {
-  runApp(const MaterialApp(
+import 'drawer.dart';
+
+Future<void> main(List<String> args) async {
+  WidgetsFlutterBinding.ensureInitialized();
+  var whoLoggedIn = await getStringValueSP();
+  runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
-    home: Home(),
+    home: whoLoggedIn != "null" ? const MyApp() : const Login(),
   ));
 }
 
-class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+class Login extends StatefulWidget {
+  const Login({Key? key}) : super(key: key);
 
   @override
-  State<Home> createState() => _HomeState();
+  State<Login> createState() => _LoginState();
 }
 
-class _HomeState extends State<Home> {
-  final List<String> gambar = [
-    "https://docs.flutter.dev/assets/images/dash/dash-fainting.gif",
-    "https://c.tenor.com/Rz19D5EE6QoAAAAC/dank-meme.gif",
-    "https://media1.giphy.com/media/8m4R4pvViWtRzbloJ1/200w.gif?cid=82a1493biapxotzqld66hsvzjup8uxt5yg7bcm3i0lzs7cju&rid=200w.gif&ct=g",
-    "https://docs.flutter.dev/assets/images/dash/dash-fainting.gif",
-    "https://docs.flutter.dev/assets/images/dash/dash-fainting.gif",
-    "https://docs.flutter.dev/assets/images/dash/dash-fainting.gif",
-    "https://docs.flutter.dev/assets/images/dash/dash-fainting.gif",
-    "https://docs.flutter.dev/assets/images/dash/dash-fainting.gif",
-  ];
-
-  static const Map<String, Color> colors = {
-    "one": Color(0xFF2DB569),
-    "two": Color(0xFF2DB569),
-    "three": Color(0xFF2DB569),
-    "four": Color(0xFF2DB569),
-    "five": Color(0xFF2DB569),
-    "six": Color(0xFF2DB569),
-    "seven": Color(0xFF2DB569),
-    "eight": Color(0xFF2DB569),
-  };
+class _LoginState extends State<Login> {
+  final nameController = TextEditingController();
+  final passController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    timeDilation = 5.0;
     return Scaffold(
+      appBar: AppBar(
+        title: const Text("lol kids"),
+        backgroundColor: Colors.green,
+      ),
       body: Container(
-        decoration: const BoxDecoration(
-            gradient: LinearGradient(
-                colors: [Colors.white, Colors.purpleAccent, Colors.deepPurple],
-                begin: FractionalOffset.topCenter,
-                end: FractionalOffset.bottomCenter)),
-        child: PageView.builder(
-          controller: PageController(viewportFraction: 0.8),
-          itemCount: gambar.length,
-          itemBuilder: (BuildContext context, int i) {
-            return Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 5.0, vertical: 50.0),
-              child: Material(
-                elevation: 8.0,
-                child: Stack(
-                  fit: StackFit.expand,
-                  children: [
-                    Hero(
-                        tag: gambar[i],
-                        child: Material(
-                          child: InkWell(
-                            child: Flexible(
-                              flex: 1,
-                              child: Container(
-                                color: colors.values.elementAt(i),
-                                child: Image.network(
-                                  gambar[i],
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
-                            onTap: () => Navigator.of(context).push(
-                                MaterialPageRoute(
-                                    builder: (context) => Halamandua(
-                                        gambar: gambar[i],
-                                        colors: colors.values.elementAt(i)))),
-                          ),
-                        ))
+        padding: const EdgeInsets.all(30),
+        child: Center(
+          child: Column(
+            children: [
+              Form(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    TextFormField(
+                      decoration: const InputDecoration(
+                        hintText: 'Enter your email',
+                      ),
+                      controller: nameController,
+                      validator: (String? value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter some text';
+                        }
+                        return null;
+                      },
+                    ),
+                    TextFormField(
+                      decoration: const InputDecoration(
+                        hintText: 'Enter your password',
+                      ),
+                      controller: passController,
+                      validator: (String? value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter some text';
+                        }
+                        return null;
+                      },
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 16.0),
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.green),
+                        onPressed: () {
+                          if (nameController.text == "seer" &&
+                              passController.text == "hahaha") {
+                            addStringToSP(nameController.text);
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => const MyApp()));
+                          }
+                        },
+                        child: const Text('Submit'),
+                      ),
+                    ),
                   ],
                 ),
-              ),
-            );
-          },
+              )
+            ],
+          ),
         ),
       ),
     );
   }
 }
 
-class Halamandua extends StatefulWidget {
-  const Halamandua({super.key, required this.gambar, required this.colors});
-  final String gambar;
-  final Color colors;
-
-  @override
-  State<Halamandua> createState() => _HalamanduaState();
+addStringToSP(String value) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  prefs.setString('Username', value);
 }
 
-class _HalamanduaState extends State<Halamandua> {
-  Color warna = Colors.grey;
-
-  void _pilihannya(Pilihan pilihan) {
-    setState(() {
-      warna = pilihan.warna;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("BT21"),
-        backgroundColor: Colors.purpleAccent,
-        actions: [
-          PopupMenuButton<Pilihan>(
-              onSelected: _pilihannya,
-              itemBuilder: (BuildContext context) {
-                return listPilihan.map((Pilihan x) {
-                  return PopupMenuItem(value: x,child: Text(x.teks),);
-                }).toList();
-              })
-        ],
-      ),
-      body: Stack(
-        children: [
-          Container(
-            decoration: const BoxDecoration(
-                gradient: RadialGradient(
-                    center: Alignment.center,
-                    colors: [Colors.purple, Colors.white, Colors.deepPurple])),
-          ),
-          Center(
-            child: Hero(
-                tag: widget.gambar,
-                child: ClipOval(
-                  child: SizedBox(
-                    width: 200.0,
-                    height: 200.0,
-                    child: Material(
-                      child: InkWell(
-                        onTap: () => Navigator.of(context).pop(),
-                        child: Flexible(
-                            child: Flexible(
-                                flex: 1,
-                                child: Container(
-                                  color: widget.colors,
-                                  child: Image.network(widget.gambar,
-                                      fit: BoxFit.cover),
-                                ))),
-                      ),
-                    ),
-                  ),
-                )),
-          )
-        ],
-      ),
-    );
-  }
+getStringValueSP() async {
+  SharedPreferences preferences = await SharedPreferences.getInstance();
+  String data = preferences.getString('Username').toString();
+  return data;
 }
-
-class Pilihan {
-  const Pilihan({required this.teks, required this.warna});
-  final String teks;
-  final Color warna;
-}
-
-List<Pilihan> listPilihan = const <Pilihan>[
-  const Pilihan(teks: "Red", warna: Colors.red),
-  const Pilihan(teks: "Green", warna: Colors.green),
-  const Pilihan(teks: "Blue", warna: Colors.blue),
-];
