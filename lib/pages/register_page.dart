@@ -55,7 +55,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 // ),
                 // text di atas
                 const Text(
-                  "SIAPA KAMU??!",
+                  "Register",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 36),
                 ),
 
@@ -66,18 +66,12 @@ class _RegisterPageState extends State<RegisterPage> {
 
                 // ini input text atau form
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25),
-                  child: Container(
-                    decoration: BoxDecoration(
-                        color: Colors.grey[200],
-                        border: Border.all(color: Colors.white),
-                        borderRadius: BorderRadius.circular(12)),
-                    child: TextField(
-                      controller: _emailController,
-                      decoration: const InputDecoration(
-                          border: InputBorder.none,
-                          hintText: 'Email',
-                          filled: true),
+                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                  child: TextField(
+                    controller: _emailController,
+                    decoration: const InputDecoration(
+                      border: UnderlineInputBorder(),
+                      labelText: 'Email',
                     ),
                   ),
                 ),
@@ -88,19 +82,13 @@ class _RegisterPageState extends State<RegisterPage> {
 
                 // ini input text atau form
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25),
-                  child: Container(
-                    decoration: BoxDecoration(
-                        color: Colors.grey[200],
-                        border: Border.all(color: Colors.white),
-                        borderRadius: BorderRadius.circular(12)),
-                    child: TextField(
-                      controller: _passController,
-                      obscureText: true,
-                      decoration: const InputDecoration(
-                          border: InputBorder.none,
-                          hintText: 'Password',
-                          filled: true),
+                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                  child: TextField(
+                    obscureText: true,
+                    controller: _passController,
+                    decoration: const InputDecoration(
+                      border: UnderlineInputBorder(),
+                      labelText: 'Password',
                     ),
                   ),
                 ),
@@ -113,45 +101,36 @@ class _RegisterPageState extends State<RegisterPage> {
 
                 // ini input text atau form
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25),
-                  child: Container(
-                    decoration: BoxDecoration(
-                        color: Colors.grey[200],
-                        border: Border.all(color: Colors.white),
-                        borderRadius: BorderRadius.circular(12)),
-                    child: TextField(
-                      controller: _confirmPassController,
-                      obscureText: true,
-                      decoration: const InputDecoration(
-                          border: InputBorder.none,
-                          hintText: 'Confirm Password',
-                          filled: true),
+                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                  child: TextField(
+                    obscureText: true,
+                    controller: _confirmPassController,
+                    decoration: const InputDecoration(
+                      border: UnderlineInputBorder(),
+                      labelText: 'Confirm Password',
                     ),
                   ),
                 ),
 
                 //
                 const SizedBox(
-                  height: 10,
+                  height: 30,
                 ),
                 //
 
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25),
-                  child: GestureDetector(
-                    onTap: _signUp,
-                    child: Container(
-                      padding: const EdgeInsets.all(20),
-                      decoration: BoxDecoration(
-                          color: Colors.blue,
-                          borderRadius: BorderRadius.circular(10)),
-                      child: const Center(
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                        onPressed: _signUp,
+                        child: const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 10),
                           child: Text(
-                        "Register",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 18),
-                      )),
-                    ),
+                            "Submit",
+                            style: TextStyle(fontSize: 24),
+                          ),
+                        )),
                   ),
                 ),
 
@@ -163,7 +142,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Text(
-                      "AKU USER LOH YA MZ! ",
+                      "Saya userrr! ",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                       ),

@@ -49,7 +49,7 @@ class _LoginPageState extends State<LoginPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Text(
-                  "Ongghuen??!",
+                  "TSA: End Game",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 36),
                 ),
 
@@ -58,7 +58,7 @@ class _LoginPageState extends State<LoginPage> {
                   height: 10,
                 ),
                 const Text(
-                  "Selamat datang, ngabs!",
+                  "Selamat datang!",
                   style: TextStyle(fontSize: 20),
                 ),
 
@@ -69,18 +69,12 @@ class _LoginPageState extends State<LoginPage> {
 
                 // ini input text atau form
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25),
-                  child: Container(
-                    decoration: BoxDecoration(
-                        color: Colors.grey[200],
-                        border: Border.all(color: Colors.white),
-                        borderRadius: BorderRadius.circular(12)),
-                    child: TextField(
-                      controller: _emailController,
-                      decoration: const InputDecoration(
-                          border: InputBorder.none,
-                          hintText: 'Email',
-                          filled: true),
+                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                  child: TextField(
+                    controller: _emailController,
+                    decoration: const InputDecoration(
+                      border: UnderlineInputBorder(),
+                      labelText: 'Email Anda',
                     ),
                   ),
                 ),
@@ -91,19 +85,13 @@ class _LoginPageState extends State<LoginPage> {
 
                 // ini input text atau form
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25),
-                  child: Container(
-                    decoration: BoxDecoration(
-                        color: Colors.grey[200],
-                        border: Border.all(color: Colors.white),
-                        borderRadius: BorderRadius.circular(12)),
-                    child: TextField(
-                      controller: _passController,
-                      obscureText: true,
-                      decoration: const InputDecoration(
-                          border: InputBorder.none,
-                          hintText: 'Password',
-                          filled: true),
+                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                  child: TextField(
+                    obscureText: true,
+                    controller: _passController,
+                    decoration: const InputDecoration(
+                      border: UnderlineInputBorder(),
+                      labelText: 'Password Anda',
                     ),
                   ),
                 ),

@@ -70,21 +70,44 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(),
+      drawer: Drawer(
+        // Add a ListView to the drawer. This ensures the user can scroll
+        // through the options in the drawer if there isn't enough vertical
+        // space to fit everything.
+        child: ListView(
+          // Important: Remove any padding from the ListView.
+          padding: EdgeInsets.zero,
+          children: [
+            DrawerHeader(
+              decoration: const BoxDecoration(
+                color: Colors.blue,
+              ),
+              child: Text(
+                _user.email!,
+                style: const TextStyle(color: Colors.white, fontSize: 28),
+              ),
+            ),
+            ListTile(
+              title: Row(
+                children: const [
+                  Icon(Icons.logout),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    child: Text('Logout'),
+                  ),
+                ],
+              ),
+              onTap: _signOut,
+            ),
+          ],
+        ),
+      ),
       body: SafeArea(
           child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text("signed in as: ${_user.email!}"),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 58),
-              width: double.infinity,
-              child: MaterialButton(
-                onPressed: _signOut,
-                color: Colors.blue,
-                child: Text("Sign Out"),
-              ),
-            ),
             const Text(
               'Poin Koordinat',
               style: TextStyle(
@@ -102,7 +125,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             const SizedBox(
-              height: 20.0,
+              height: 30.0,
             ),
             //
 
@@ -113,7 +136,7 @@ class _HomePageState extends State<HomePage> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10.0,
             ),
             Padding(
@@ -131,7 +154,19 @@ class _HomePageState extends State<HomePage> {
                 });
                 getAddressFromLongLat(position);
               },
-              child: const Text('y'),
+              child: const Text('Cek Lokasi'),
+            ),
+
+//
+            SizedBox(
+              height: 30,
+            ),
+            const Text(
+              'Navigasi',
+              style: TextStyle(
+                fontSize: 22.0,
+                fontWeight: FontWeight.bold,
+              ),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 32),
@@ -139,7 +174,7 @@ class _HomePageState extends State<HomePage> {
                 autofocus: false,
                 controller: cari,
                 decoration: InputDecoration(
-                    hintText: "apaan tuh",
+                    hintText: "Misal: Eterno Kafe",
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(32))),
               ),
@@ -153,7 +188,7 @@ class _HomePageState extends State<HomePage> {
                       package: 'com.google.android.apps.maps');
                   await intent.launch();
                 },
-                child: const Text("eyes wide open when youre dreaming"))
+                child: const Text("Cari Lokasi"))
           ],
         ),
       )),
