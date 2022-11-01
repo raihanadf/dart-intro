@@ -38,6 +38,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   firebase_core: ^1.24.0
   firebase_auth: ^3.11.2
+  cloud_firestore: ^3.5.1
 
   # gps
   geolocator: ^9.0.0
@@ -45,6 +46,9 @@ dependencies:
 
   # intent like
   android_intent_plus: ^3.1.5
+
+  # getx
+  get: ^4.6.5
 
 dev_dependencies:
   flutter_test:

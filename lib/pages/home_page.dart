@@ -1,25 +1,50 @@
 import 'package:android_intent_plus/android_intent.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
-
-void main(List<String> args) {
-  runApp(const HomePage());
-}
+import 'package:get/get.dart';
+import 'package:ongghuen/auth/auth_page.dart';
+import 'package:ongghuen/pages/login_page.dart';
+import 'package:ongghuen/pages/setting_page.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  final String? docId;
+  const HomePage({Key? key, required this.docId}) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  final _user = FirebaseAuth.instance.currentUser!;
+  // final _user = FirebaseAuth.instance.currentUser!;
+  var db = FirebaseFirestore.instance;
+
   final cari = TextEditingController();
+  String titleName = "Home";
   String location = 'lat: long:';
   String address = 'Mencari lokasi...';
+
+  @override
+  initState() {
+    _getUsername();
+  }
+
+  // getUser
+  _getUsername() async {
+    final docRef = db.collection("users").doc(widget.docId);
+    docRef.get().then(
+      (DocumentSnapshot doc) {
+        final data = doc.data() as Map<String, dynamic>;
+        setState(() {
+          titleName = "Welcome, ${data['username']}";
+        });
+        // ...
+      },
+      onError: (e) => print("Error getting document: $e"),
+    );
+  }
 
   //getLongLAT
   Future<Position> _getGeoLocationPosition() async {
@@ -64,43 +89,27 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future _signOut() async {
-    FirebaseAuth.instance.signOut();
+    // FirebaseAuth.instance.signOut();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
-      drawer: Drawer(
-        // Add a ListView to the drawer. This ensures the user can scroll
-        // through the options in the drawer if there isn't enough vertical
-        // space to fit everything.
-        child: ListView(
-          // Important: Remove any padding from the ListView.
-          padding: EdgeInsets.zero,
-          children: [
-            DrawerHeader(
-              decoration: const BoxDecoration(
-                color: Colors.blue,
-              ),
-              child: Text(
-                _user.email!,
-                style: const TextStyle(color: Colors.white, fontSize: 28),
-              ),
+      appBar: AppBar(
+        title: SingleChildScrollView(
+            child: Text(titleName), scrollDirection: Axis.horizontal),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 14.0),
+            child: GestureDetector(
+              child: const Icon(Icons.logout),
+              onTap: () => Get.off(const AuthPage()),
             ),
-            ListTile(
-              title: Row(
-                children: const [
-                  Icon(Icons.logout),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10),
-                    child: Text('Logout'),
-                  ),
-                ],
-              ),
-              onTap: _signOut,
-            ),
-          ],
+          )
+        ],
+        leading: GestureDetector(
+          child: Icon(Icons.settings),
+          onTap: () => Get.to(SettingPage(docId: widget.docId)),
         ),
       ),
       body: SafeArea(
@@ -161,12 +170,19 @@ class _HomePageState extends State<HomePage> {
             SizedBox(
               height: 30,
             ),
+
+//
             const Text(
               'Navigasi',
               style: TextStyle(
                 fontSize: 22.0,
                 fontWeight: FontWeight.bold,
               ),
+            ),
+
+            //
+            SizedBox(
+              height: 10,
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 32),

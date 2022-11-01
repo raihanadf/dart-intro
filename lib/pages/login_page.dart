@@ -1,7 +1,10 @@
 import 'dart:ui';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:ongghuen/pages/home_page.dart';
 
 class LoginPage extends StatefulWidget {
   final VoidCallback showRegisterPage;
@@ -13,14 +16,27 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   // controllers
-  final _emailController = TextEditingController();
+  final _usernameController = TextEditingController();
   final _passController = TextEditingController();
 
   Future _signIn() async {
+    var db = FirebaseFirestore.instance;
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: _emailController.text.trim(),
-          password: _passController.text.trim());
+      // await FirebaseAuth.instance.signInWithEmailAndPassword(
+      //     email: _emailController.text.trim(),
+      //     password: _passController.text.trim());
+
+      await db.collection("users").get().then((event) {
+        for (var doc in event.docs) {
+          if (_usernameController.text.trim() == doc.data()["username"] &&
+              _passController.text.trim() == doc.data()["password"]) {
+            return Get.off(HomePage(
+              docId: doc.id,
+            ));
+          }
+        }
+        return Get.snackbar("Login", "Username atau Password salah");
+      });
     } catch (e) {
       const snackBar = SnackBar(
         content: Text('Login gagal!'),
@@ -33,7 +49,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void dispose() {
     // TODO: implement dispose
-    _emailController.dispose();
+    _usernameController.dispose();
     _passController.dispose();
     super.dispose();
   }
@@ -71,10 +87,10 @@ class _LoginPageState extends State<LoginPage> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 24.0),
                   child: TextField(
-                    controller: _emailController,
+                    controller: _usernameController,
                     decoration: const InputDecoration(
                       border: UnderlineInputBorder(),
-                      labelText: 'Email Anda',
+                      labelText: 'Username Anda',
                     ),
                   ),
                 ),
