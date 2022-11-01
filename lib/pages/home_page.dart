@@ -56,6 +56,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          backgroundColor: Color(0xFF4E9F3D),
           title: const SingleChildScrollView(
               child: Text("Home"), scrollDirection: Axis.horizontal),
           actions: [
@@ -82,7 +83,7 @@ class _HomePageState extends State<HomePage> {
             children: [
               const DrawerHeader(
                 decoration: BoxDecoration(
-                  color: Colors.blue,
+                  color: Color(0xFF4E9F3D),
                 ),
                 child: Text(''),
               ),
@@ -134,6 +135,52 @@ class _HomePageState extends State<HomePage> {
                   style: const TextStyle(
                       fontSize: 18, fontWeight: FontWeight.bold),
                 ),
+                Container(
+                  height: 500,
+                  width: 300,
+                  child: GridView.count(
+                    primary: false,
+                    padding: const EdgeInsets.all(20),
+                    crossAxisSpacing: 10,
+                    mainAxisSpacing: 10,
+                    crossAxisCount: 2,
+                    children: <Widget>[
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        color: Colors.teal[100],
+                        child: const Text("Stay you're not gonna leave me"),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        color: Colors.teal[200],
+                        child: const Text(
+                            'This place is right where you need to be'),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        color: Colors.teal[300],
+                        child: const Text(
+                            'So why your words gotta meean so much to them'),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        color: Colors.teal[400],
+                        child: const Text('When they mean nothing to me'),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        color: Colors.teal[500],
+                        child: const Text('So stay youre not what you hearing'),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        color: Colors.teal[600],
+                        child: const Text(
+                            'Cause i\'ve been watching you changing'),
+                      ),
+                    ],
+                  ),
+                )
               ],
             ),
           ),

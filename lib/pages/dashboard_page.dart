@@ -95,6 +95,7 @@ class _DashboardPageState extends State<DashboardPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Color(0xFF4E9F3D),
         title: const Text("Dashboard"),
       ),
       body: SafeArea(
@@ -140,6 +141,8 @@ class _DashboardPageState extends State<DashboardPage> {
 
             //
             ElevatedButton(
+              style:
+                  ElevatedButton.styleFrom(backgroundColor: Color(0xFF4E9F3D)),
               onPressed: () async {
                 Position position = await _getGeoLocationPosition();
                 setState(() {
@@ -181,6 +184,8 @@ class _DashboardPageState extends State<DashboardPage> {
               ),
             ),
             ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: Color(0xFF4E9F3D)),
                 onPressed: () async {
                   final intent = AndroidIntent(
                       action: 'action_view',

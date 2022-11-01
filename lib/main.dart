@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:ongghuen/auth/auth_page.dart';
 
 import 'package:ongghuen/auth/main_page.dart';
 import 'firebase_options.dart';
@@ -23,9 +21,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const GetMaterialApp(
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      home: MainPage(),
+      home: const MainPage(),
     );
   }
 }

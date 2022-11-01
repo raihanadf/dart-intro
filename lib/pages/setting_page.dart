@@ -58,6 +58,7 @@ class _SettingPageState extends State<SettingPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Color(0xFF4E9F3D),
         title: Text("Profile Setting"),
       ),
       body: SafeArea(
@@ -146,6 +147,8 @@ class _SettingPageState extends State<SettingPage> {
                   child: SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Color(0xFF4E9F3D)),
                         onPressed: _updateInfo,
                         child: const Padding(
                           padding: EdgeInsets.symmetric(vertical: 10),

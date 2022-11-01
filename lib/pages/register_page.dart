@@ -184,12 +184,16 @@ class _RegisterPageState extends State<RegisterPage> {
                   child: SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Color(0xFF4E9F3D)),
                         onPressed: _signUp,
                         child: const Padding(
                           padding: EdgeInsets.symmetric(vertical: 10),
                           child: Text(
                             "Submit",
-                            style: TextStyle(fontSize: 24),
+                            style: TextStyle(
+                              fontSize: 24,
+                            ),
                           ),
                         )),
                   ),
@@ -215,7 +219,8 @@ class _RegisterPageState extends State<RegisterPage> {
                       child: const Text(
                         "Login sini",
                         style: TextStyle(
-                            fontWeight: FontWeight.bold, color: Colors.blue),
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF4E9F3D)),
                       ),
                     )
                   ],

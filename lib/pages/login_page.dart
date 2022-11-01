@@ -127,6 +127,8 @@ class _LoginPageState extends State<LoginPage> {
                   child: SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Color(0xFF4E9F3D)),
                         onPressed: _signIn,
                         child: const Padding(
                           padding: EdgeInsets.symmetric(vertical: 10),
@@ -157,7 +159,8 @@ class _LoginPageState extends State<LoginPage> {
                       child: const Text(
                         "Register sekarang",
                         style: TextStyle(
-                            fontWeight: FontWeight.bold, color: Colors.blue),
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF4E9F3D)),
                       ),
                     )
                   ],
