@@ -5,7 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:hive/hive.dart';
 import 'package:ongghuen/auth/auth_page.dart';
+import 'package:ongghuen/local/database.dart';
+import 'package:ongghuen/pages/dashboard_page.dart';
 import 'package:ongghuen/pages/login_page.dart';
 import 'package:ongghuen/pages/setting_page.dart';
 
@@ -19,12 +22,11 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   // final _user = FirebaseAuth.instance.currentUser!;
+  UserHiveDatabase udb = UserHiveDatabase();
   var db = FirebaseFirestore.instance;
 
   final cari = TextEditingController();
   String titleName = "Home";
-  String location = 'lat: long:';
-  String address = 'Mencari lokasi...';
 
   @override
   initState() {
@@ -38,54 +40,12 @@ class _HomePageState extends State<HomePage> {
       (DocumentSnapshot doc) {
         final data = doc.data() as Map<String, dynamic>;
         setState(() {
-          titleName = "Welcome, ${data['username']}";
+          titleName = data['nama'];
         });
         // ...
       },
       onError: (e) => print("Error getting document: $e"),
     );
-  }
-
-  //getLongLAT
-  Future<Position> _getGeoLocationPosition() async {
-    bool serviceEnabled;
-    LocationPermission permission;
-
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    //location service not enabled, don't continue
-    if (!serviceEnabled) {
-      await Geolocator.openLocationSettings();
-      return Future.error('Location service Not Enabled');
-    }
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        return Future.error('Location permission denied');
-      }
-    }
-
-    //permission denied forever
-    if (permission == LocationPermission.deniedForever) {
-      return Future.error(
-        'Location permission denied forever, we cannot access',
-      );
-    }
-    //continue accessing the position of device
-    return await Geolocator.getCurrentPosition(
-      desiredAccuracy: LocationAccuracy.high,
-    );
-  }
-
-  // //getAddress
-  Future<void> getAddressFromLongLat(Position position) async {
-    List<Placemark> placemarks =
-        await placemarkFromCoordinates(position.latitude, position.longitude);
-    Placemark place = placemarks[0];
-    setState(() {
-      address =
-          '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
-    });
   }
 
   Future _signOut() async {
@@ -95,119 +55,88 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: SingleChildScrollView(
-            child: Text(titleName), scrollDirection: Axis.horizontal),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 14.0),
-            child: GestureDetector(
-              child: const Icon(Icons.logout),
-              onTap: () => Get.off(const AuthPage()),
-            ),
-          )
-        ],
-        leading: GestureDetector(
-          child: Icon(Icons.settings),
-          onTap: () => Get.to(SettingPage(docId: widget.docId)),
-        ),
-      ),
-      body: SafeArea(
-          child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text(
-              'Poin Koordinat',
-              style: TextStyle(
-                fontSize: 22.0,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(
-              height: 10.0,
-            ),
-            Text(
-              location,
-              style: const TextStyle(
-                fontSize: 16.0,
-              ),
-            ),
-            const SizedBox(
-              height: 30.0,
-            ),
-            //
-
-            const Text(
-              'Address',
-              style: TextStyle(
-                fontSize: 22.0,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(
-              height: 10.0,
-            ),
+        appBar: AppBar(
+          title: const SingleChildScrollView(
+              child: Text("Home"), scrollDirection: Axis.horizontal),
+          actions: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 32.0),
-              child: Text('${address}'),
-            ),
-
-            //
-            ElevatedButton(
-              onPressed: () async {
-                Position position = await _getGeoLocationPosition();
-                setState(() {
-                  location =
-                      'lat:${position.latitude}, long:${position.longitude}';
-                });
-                getAddressFromLongLat(position);
-              },
-              child: const Text('Cek Lokasi'),
-            ),
-
-//
-            SizedBox(
-              height: 30,
-            ),
-
-//
-            const Text(
-              'Navigasi',
-              style: TextStyle(
-                fontSize: 22.0,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-
-            //
-            SizedBox(
-              height: 10,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 32),
-              child: TextFormField(
-                autofocus: false,
-                controller: cari,
-                decoration: InputDecoration(
-                    hintText: "Misal: Eterno Kafe",
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(32))),
-              ),
-            ),
-            ElevatedButton(
-                onPressed: () async {
-                  final intent = AndroidIntent(
-                      action: 'action_view',
-                      data: Uri.encodeFull(
-                          'google.navigation:q=${cari.text.trim()}'),
-                      package: 'com.google.android.apps.maps');
-                  await intent.launch();
+              padding: const EdgeInsets.symmetric(horizontal: 14.0),
+              child: GestureDetector(
+                child: const Icon(Icons.logout),
+                onTap: () {
+                  udb.removeUser();
+                  Get.off(const AuthPage());
                 },
-                child: const Text("Cari Lokasi"))
+              ),
+            )
           ],
+          // leading: GestureDetector(
+          //   child: Icon(Icons.settings),
+          //   onTap: () => Get.to(SettingPage(docId: widget.docId)),
+          // ),
         ),
-      )),
-    );
+        drawer: Drawer(
+          child: ListView(
+            // Important: Remove any padding from the ListView.
+            padding: EdgeInsets.zero,
+            children: [
+              const DrawerHeader(
+                decoration: BoxDecoration(
+                  color: Colors.blue,
+                ),
+                child: Text(''),
+              ),
+              ListTile(
+                title: Row(
+                  children: [
+                    const Icon(Icons.dashboard),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: const Text('Dashboard'),
+                    ),
+                  ],
+                ),
+                onTap: () {
+                  Get.to(DashboardPage(docId: widget.docId));
+                },
+              ),
+              ListTile(
+                title: Row(
+                  children: [
+                    const Icon(Icons.commit),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: const Text('Profile'),
+                    ),
+                  ],
+                ),
+                onTap: () {
+                  Get.to(SettingPage(docId: widget.docId));
+                },
+              ),
+            ],
+          ),
+        ),
+        body: Center(
+            child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Padding(
+            padding: const EdgeInsets.all(32.0),
+            child: Column(
+              children: [
+                Text(
+                  "Selamat Datang",
+                  style: const TextStyle(
+                      fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  titleName,
+                  style: const TextStyle(
+                      fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+          ),
+        )));
   }
 }

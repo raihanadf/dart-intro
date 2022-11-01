@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ongghuen/local/database.dart';
 import 'package:ongghuen/pages/home_page.dart';
 
 class LoginPage extends StatefulWidget {
@@ -15,6 +16,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  UserHiveDatabase udb = UserHiveDatabase();
   // controllers
   final _usernameController = TextEditingController();
   final _passController = TextEditingController();
@@ -30,6 +32,8 @@ class _LoginPageState extends State<LoginPage> {
         for (var doc in event.docs) {
           if (_usernameController.text.trim() == doc.data()["username"] &&
               _passController.text.trim() == doc.data()["password"]) {
+            udb.user = doc.id;
+            udb.updateDB();
             return Get.off(HomePage(
               docId: doc.id,
             ));
